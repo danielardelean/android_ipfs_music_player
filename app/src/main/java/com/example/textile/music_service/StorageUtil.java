@@ -1,4 +1,4 @@
-package com.example.textile;
+package com.example.textile.music_service;
 
 import android.content.Context;
 import android.content.SharedPreferences;

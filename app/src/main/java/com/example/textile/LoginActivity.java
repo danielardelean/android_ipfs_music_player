@@ -1,6 +1,5 @@
 package com.example.textile;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
@@ -20,10 +20,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private EditText emailTextView, passwordTextView;
-    private Button Btn;
-    private Button reg, reset;
     private ProgressBar progressbar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,35 +32,8 @@ public class LoginActivity extends AppCompatActivity {
         // initialising all views through id defined above
         emailTextView = findViewById(R.id.email);
         passwordTextView = findViewById(R.id.password);
-        Btn = findViewById(R.id.login);
-        reg = (Button) findViewById(R.id.reg);
-        reset = (Button) findViewById(R.id.reset);
+
         progressbar = findViewById(R.id.progressBar);
-
-        // Set on Click Listener on Sign-in button
-        Btn.setOnClickListener(v -> loginUserAccount());
-
-        reg.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
-            System.out.println(intent);
-            if (intent != null)
-                startActivity(intent);
-        });
-
-        reset.setOnClickListener(v -> {
-            if (emailCheck(emailTextView.getText().toString())) {
-                mAuth.sendPasswordResetEmail(emailTextView.getText().toString())
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(this, "Reset link sent to your email", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(this, "Unable to send reset mail", Toast.LENGTH_LONG).show();
-                            }
-                        });
-            } else {
-                Toast.makeText(this, "Your email is invalid", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     private void loginUserAccount() {
@@ -123,7 +93,6 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
     }
-
     private boolean emailCheck(String email) {
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
@@ -133,5 +102,33 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+
+    //Buttons
+    public void resetPassword(View view) {
+        if (emailCheck(emailTextView.getText().toString())) {
+            mAuth.sendPasswordResetEmail(emailTextView.getText().toString())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(this, "Reset link sent to your email", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(this, "Unable to send reset mail", Toast.LENGTH_LONG).show();
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "Your email is invalid", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void loginUser(View view) {
+        loginUserAccount();
+    }
+
+    public void regUser(View view) {
+        Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
+        System.out.println(intent);
+        if (intent != null)
+            startActivity(intent);
     }
 }

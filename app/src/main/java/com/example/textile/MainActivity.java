@@ -3,40 +3,30 @@ package com.example.textile;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
-
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
-import android.media.AudioTrack;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.textile.music_service.Audio;
+import com.example.textile.music_service.MediaPlayerService;
+import com.example.textile.music_service.StorageUtil;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
-
-import io.textile.pb.Model;
-import io.textile.pb.QueryOuterClass;
 import io.textile.textile.BaseTextileEventListener;
-import io.textile.textile.Handlers;
-import io.textile.textile.Schemas;
 import io.textile.textile.Textile;
 
-
 public class MainActivity extends AppCompatActivity {
+
     private MediaPlayerService player;
     boolean serviceBound = false;
 
@@ -44,7 +34,16 @@ public class MainActivity extends AppCompatActivity {
 
     //Used to send broadcasts intents when the user wants to play new audio
     public static final String Broadcast_PLAY_NEW_AUDIO = "com.example.textile.PlayNewAudio";
+    public static final String Broadcast_PAUSE_AUDIO = "com.example.textile.PauseAudio";
+    public static final String Broadcast_NEXT_AUDIO = "com.example.textile.NextAudio";
+    public static final String Broadcast_PREV_AUDIO = "com.example.textile.PrevAudio";
 
+    TextView songTitleName, songArtistName;
+
+    /**
+     * This method will load the songs for playing
+     * Needs to be edited for the app purpose
+     */
     private void loadAudio() {
         ContentResolver contentResolver = getContentResolver();
 
@@ -68,16 +67,16 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    //Binding this Client to the AudioPlayer Service
+
+    /**
+     * Binding this client (player variable) to the AudioPlayer Service
+     */
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
             player = binder.getService();
             serviceBound = true;
-
-            Toast.makeText(MainActivity.this, "Service Bound", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -98,16 +97,9 @@ public class MainActivity extends AppCompatActivity {
         serviceBound = savedInstanceState.getBoolean("ServiceState");
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (serviceBound) {
-            unbindService(serviceConnection);
-            //service is active
-            player.stopSelf();
-        }
-    }
-
+    /**
+     * Triggers the running service based on the playing list created before
+     */
     private void playAudio(int audioIndex) {
         //Check is service is active
         if (!serviceBound) {
@@ -132,57 +124,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Stopping the music player service and the Textile node
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (serviceBound) {
+            unbindService(serviceConnection);
+            //service is active
+            player.stopSelf();
+        }
+        destroyTextile();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadAudio();
-        //play the first audio in the ArrayList
-        playAudio(0);
-
-
+        MediaPlayerService.title = findViewById(R.id.song_title_text_view);
+        MediaPlayerService.artist = findViewById(R.id.song_artist_text_view);
         initTextile();
-
-
-        Button simpleButton1 = (Button) findViewById(R.id.simpleButton);
-        simpleButton1.setOnClickListener(view -> {
-
-            try {
-//                System.out.println(Textile.instance().threads.peers("12D3KooWA4sraEADfR2sCWAETXbJFDxsi3wLeBcdpzadEDWW4h75").getItemsCount());
-//                System.out.println(Textile.instance().threads.get("12D3KooWA4sraEADfR2sCWAETXbJFDxsi3wLeBcdpzadEDWW4h75").getPeerCount());
-
-                // getFile();
-                getIPFSFile();
-
-
-//                textView.setText(a+"j"); //set text for text view
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-
-        Button simpleButton = (Button) findViewById(R.id.simpleButton1);
-        simpleButton.setOnClickListener(view -> {
-            try {
-                Textile.instance().threads.snapshot();
-                Textile.instance().account.sync(QueryOuterClass.QueryOptions.getDefaultInstance());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 
 
+    /**
+     * Initialize the IPFS Textile node by using the secret hash of the account seed
+     * If node is already initialized, this call will be done just to start the node
+     */
     private void initTextile() {
         try {
-            //Create and lunch the textile node
             Context ctx = getApplicationContext();
 
             final File filesDir = ctx.getFilesDir();
             final String path = new File(filesDir, "textile-go").getAbsolutePath();
-
             if (!Textile.isInitialized(path)) {
                 Textile.initialize(path, "SWjTdgps4E3bWxcog798LuRnvGK6Rnt6oLQoUH4sHY2MV9L7", true, false);
             }
@@ -191,8 +168,6 @@ public class MainActivity extends AppCompatActivity {
             class MyEventListener extends BaseTextileEventListener {
             }
             Textile.instance().addEventListener(new MyEventListener());
-
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -203,57 +178,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getFile() {
-        Textile.instance().files.content("QmeTSQLsHJgkZiMB8jk1v4W5yUBjZg7Uyc7qZAG3h65TWw", new Handlers.DataHandler() {
-            @Override
-            public void onComplete(byte[] data, String media) {
-                System.out.println(data.toString());
-            }
-
-            @Override
-            public void onError(Exception e) {
-                System.out.println(e);
-            }
-        });
+    public void playSong(View view) {
+        loadAudio();
+        playAudio(0);
     }
 
-    private void getIPFSFile() {
-        Textile.instance().ipfs.dataAtPath("QmeUoHVAUwf22fHV1Gtp5Y4rcL8mDRmSn7Gwcezu2Dsd4w", new Handlers.DataHandler() {
-            @Override
-            public void onComplete(byte[] data, String media) {
-                playMp3(data);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                System.out.println(e);
-            }
-        });
+    public void pauseSong(View view) {
+        Intent broadcastIntent = new Intent(Broadcast_PAUSE_AUDIO);
+        sendBroadcast(broadcastIntent);
     }
 
+    public void prevSong(View view) {
+        Intent broadcastIntent = new Intent(Broadcast_PREV_AUDIO);
+        sendBroadcast(broadcastIntent);
+    }
 
-    private MediaPlayer mediaPlayer = new MediaPlayer();
+    public void nextSong(View view) throws InterruptedException {
+        Intent broadcastIntent = new Intent(Broadcast_NEXT_AUDIO);
+        sendBroadcast(broadcastIntent);
+    }
 
-    private void playMp3(byte[] mp3SoundByteArray) {
-        try {
-            // create temp file that will hold byte array
-            File tempMp3 = File.createTempFile("kurchina", "mp3", getCacheDir());
-            tempMp3.deleteOnExit();
-            FileOutputStream fos = new FileOutputStream(tempMp3);
-            fos.write(mp3SoundByteArray);
-            fos.close();
+    public void settingsActivity(View view) {
+        Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+        startActivity(intent);
+    }
 
-
-            mediaPlayer.reset();
-
-            FileInputStream fis = new FileInputStream(tempMp3);
-            mediaPlayer.setDataSource(fis.getFD());
-
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (IOException ex) {
-            String s = ex.toString();
-            ex.printStackTrace();
-        }
+    public void playListActivity(View view) {
+        Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+        startActivity(intent);
     }
 }
+
+
+
+

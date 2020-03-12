@@ -1,91 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?><!-- Linear Layout with vertical orientation and other properties -->
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http:// schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:background="@drawable/background"
-    android:scaleType="centerCrop"
-    android:padding="25dp"
+    android:layout_height="match_parent">
 
-
-    tools:context=".LoginActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:fontFamily="@font/montserrat"
-        android:text="IPFS Music App"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
-
-        android:fontFamily="@font/montserrat"
-        android:text="Sign into your Account" />
-
-    <!-- ProgressBar for Loading Time -->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
-
-
-    <!-- Edit text for email\password -->
-    <EditText
-        android:id="@+id/email"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your Email" />
+        android:layout_height="match_parent"
+        android:background="@drawable/background"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="true" />
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your Password"
-        android:inputType="textPassword" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http:// schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".LoginActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
-
-    <!-- Button for Login with text "Login" -->
-    <Button
-        android:id="@+id/login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login" />
-
-    <Button
-        android:id="@+id/reg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Registration" />
-
-    <Button
-        android:id="@+id/reset"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Reset password" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
+            android:text="Distributed Music Player"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+
+            android:fontFamily="@font/montserrat"
+            android:text="Login into your Account" />
+
+        <!-- ProgressBar for Loading Time -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF9800"
+            android:fontFamily="sans-serif-light"
+            android:hint="Enter your Email"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF9800"
+
+            android:fontFamily="sans-serif-light"
+            android:hint="Enter your Password"
+            android:inputType="textPassword"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:gravity="end"
+            android:onClick="resetPassword"
+            android:text="Forgot password?" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/buttonshape"
+            android:onClick="loginUser"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            android:text="Login"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="23sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/buttonshapered"
+
+            android:onClick="regUser"
+            android:shadowColor="#F7FFFFFF"
+
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            android:text="Register"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+
+            android:textSize="23sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+</FrameLayout>

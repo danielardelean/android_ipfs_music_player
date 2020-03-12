@@ -1,4 +1,4 @@
-package com.example.textile;
+package com.example.textile.music_service;
 
 import java.io.Serializable;
 

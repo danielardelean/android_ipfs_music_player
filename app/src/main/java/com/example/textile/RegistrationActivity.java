@@ -18,9 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 public class RegistrationActivity extends AppCompatActivity {
-
     private EditText emailTextView, passwordTextView;
-    private Button Btn, login;
     private ProgressBar progressbar;
     private FirebaseAuth mAuth;
 
@@ -29,24 +27,12 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        // taking FirebaseAuth instance
         mAuth = FirebaseAuth.getInstance();
 
         // initialising all views through id defined above
         emailTextView = findViewById(R.id.email);
         passwordTextView = findViewById(R.id.passwd);
-        Btn = findViewById(R.id.btnregister);
-        login = findViewById(R.id.btnlogin);
         progressbar = findViewById(R.id.progressbar);
-
-        // Set on Click Listener on Registration button
-        Btn.setOnClickListener(v -> registerNewUser());
-        login.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            System.out.println(intent);
-            if (intent != null)
-                startActivity(intent);
-        });
     }
 
     private void registerNewUser() {
@@ -99,5 +85,15 @@ public class RegistrationActivity extends AppCompatActivity {
                         progressbar.setVisibility(View.GONE);
                     }
                 });
+    }
+
+    public void registerButton(View view) {
+        registerNewUser();
+    }
+
+    public void backToLoginButton(View view) {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        if (intent != null)
+            startActivity(intent);
     }
 }
