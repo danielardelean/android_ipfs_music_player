@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/white"
-            app:navigationIcon="@drawable/ic_keyboard_arrow_left_black_48dp"
+            app:navigationIcon="@drawable/ic_keyboard_arrow_left"
             app:title="Settings" />
     </com.google.android.material.appbar.AppBarLayout>
 

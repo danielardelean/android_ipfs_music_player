@@ -7,7 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.textile.settings_fragment.SettingsFragment;
+import com.example.textile.fragment.SettingsFragment;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,7 +20,7 @@ import io.textile.textile.Textile;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private MediaPlayer mediaPlayer = new MediaPlayer();
+
     private Toolbar toolbar;
 
 
@@ -87,6 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void playMp3(byte[] mp3SoundByteArray) {
         try {
+             MediaPlayer mediaPlayer = new MediaPlayer();
             // create temp file that will hold byte array
             File tempMp3 = File.createTempFile("kurchina", "mp3", getCacheDir());
             tempMp3.deleteOnExit();
@@ -116,4 +117,6 @@ public class SettingsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
 }

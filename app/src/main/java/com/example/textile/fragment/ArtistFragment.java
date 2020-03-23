@@ -1,0 +1,55 @@
+package com.example.textile.fragment;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.GridView;
+
+import androidx.fragment.app.Fragment;
+
+import com.example.textile.Artist;
+import com.example.textile.MainActivity;
+import com.example.textile.R;
+import com.example.textile.adapter.ArtistAdapter;
+
+import java.util.ArrayList;
+
+public class ArtistFragment extends Fragment {
+    private ArrayList<Artist> list;
+
+    private Context mContext;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext = null;
+    }
+
+    public ArtistFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_artist, container, false);
+
+        ArtistAdapter itemsAdapter = new ArtistAdapter(mContext, MainActivity.artists);
+        GridView gridView = view.findViewById(R.id.list_artist);
+        gridView.setAdapter(itemsAdapter);
+
+        return view;
+    }
+}

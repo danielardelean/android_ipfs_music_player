@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cloud Music</string>
+    <string name="app_name" translatable="false">Cloud Music</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -12,7 +12,17 @@
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <!--Login view-->
+    <string name="login_app_name" translatable="false">Distributed Music Player</string>
+    <string name="login_welcome_message">Login into your Account</string>
+    <string name="login_email_hint">Enter your Email</string>
+    <string name="login_password_hint">Enter your Password</string>
+    <string name="login_forgot_password">Forgot password?</string>
+    <string name="background_login_image_description">Background login image</string>
+    <string name="login_button_text">Login</string>
+    <string name="register_button_text">Register</string>
+    <string name="register_age_hint">Enter your Age</string>
 </resources>

@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#FFB300</item>
+        <item name="colorPrimary">#FF8F00</item>
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
@@ -15,4 +15,15 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
+    <style name="Header1Style">
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.DeviceDefault.Large</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextInputStyle">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

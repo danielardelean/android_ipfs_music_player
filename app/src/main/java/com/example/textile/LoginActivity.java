@@ -1,98 +1,117 @@
 package com.example.textile;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.textile.util.MyReceiver;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
+    private EditText emailTextView, passwordTextView;
+
     private FirebaseAuth mAuth;
 
-    private EditText emailTextView, passwordTextView;
-    private ProgressBar progressbar;
+    private BroadcastReceiver MyReceiver = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // taking instance of FirebaseAuth
-        mAuth = FirebaseAuth.getInstance();
 
         // initialising all views through id defined above
         emailTextView = findViewById(R.id.email);
         passwordTextView = findViewById(R.id.password);
 
-        progressbar = findViewById(R.id.progressBar);
+        // Firebase
+        mAuth = FirebaseAuth.getInstance();
+
+        //Start an intent for checking the internet connection
+        MyReceiver = new MyReceiver();
+        registerReceiver(MyReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+        findViewById(R.id.reset_password_text_view).setOnClickListener(view -> {
+            if (TextUtils.isEmpty(emailTextView.getText().toString())) {
+                Toast.makeText(getApplicationContext(), "Email required!", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (!emailCheck(emailTextView.getText().toString())) {
+                Toast.makeText(getApplicationContext(), "Email entered is invalid. Try again!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            mAuth.sendPasswordResetEmail(emailTextView.getText().toString())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Reset link sent to your email.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Unable to send reset mail", Toast.LENGTH_LONG).show();
+                        }
+                    });
+        });
+        findViewById(R.id.login_button).setOnClickListener(view -> loginUserAccount());
+        findViewById(R.id.registration_intent_text_view).setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
+            System.out.println(intent);
+            if (intent != null)
+                startActivity(intent);
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(MyReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(MyReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     private void loginUserAccount() {
-        // show the visibility of progress bar to show loading
-        progressbar.setVisibility(View.VISIBLE);
+        String email = emailTextView.getText().toString();
+        String password = passwordTextView.getText().toString();
 
-        // Take the value of two edit texts in Strings
-        String email, password;
-        email = emailTextView.getText().toString();
-        password = passwordTextView.getText().toString();
-
-        // validations for input email and password
+        // Validations for email and password input
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(),
-                    "Please enter email!!",
-                    Toast.LENGTH_LONG)
-                    .show();
+            Toast.makeText(getApplicationContext(), "Please enter your email!", Toast.LENGTH_SHORT).show();
             return;
         } else if (!emailCheck(emailTextView.getText().toString())) {
-            Toast.makeText(this, "Your email is invalid", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Email entered is invalid. Try again!", Toast.LENGTH_SHORT).show();
             return;
         }
-
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(),
-                    "Please enter password!!",
-                    Toast.LENGTH_LONG)
-                    .show();
+            Toast.makeText(getApplicationContext(), "Please enter password!", Toast.LENGTH_LONG).show();
             return;
         }
 
-        // signin existing user
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
                         task -> {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(),
-                                        "Welcome " + mAuth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
+                                        "Welcome " + mAuth.getCurrentUser().getEmail() + "!", Toast.LENGTH_SHORT).show();
 
-                                // hide the progress bar
-                                progressbar.setVisibility(View.GONE);
-
-                                // if sign-in is successful
-                                // intent to home activity
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                             } else {
-
-                                // sign-in failed
-                                Toast.makeText(getApplicationContext(),
-                                        "Login failed!!",
-                                        Toast.LENGTH_LONG)
-                                        .show();
-
-                                // hide the progress bar
-                                progressbar.setVisibility(View.GONE);
+                                Toast.makeText(getApplicationContext(), "Email/password incorrect. Try again!", Toast.LENGTH_LONG).show();
                             }
                         });
     }
+
     private boolean emailCheck(String email) {
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
@@ -102,33 +121,5 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             return false;
         }
-    }
-
-
-    //Buttons
-    public void resetPassword(View view) {
-        if (emailCheck(emailTextView.getText().toString())) {
-            mAuth.sendPasswordResetEmail(emailTextView.getText().toString())
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(this, "Reset link sent to your email", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(this, "Unable to send reset mail", Toast.LENGTH_LONG).show();
-                        }
-                    });
-        } else {
-            Toast.makeText(this, "Your email is invalid", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    public void loginUser(View view) {
-        loginUserAccount();
-    }
-
-    public void regUser(View view) {
-        Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
-        System.out.println(intent);
-        if (intent != null)
-            startActivity(intent);
     }
 }

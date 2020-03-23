@@ -18,6 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.textile.music_service.Audio;
 import com.example.textile.music_service.MediaPlayerService;
 import com.example.textile.music_service.StorageUtil;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -147,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
         MediaPlayerService.title = findViewById(R.id.song_title_text_view);
         MediaPlayerService.artist = findViewById(R.id.song_artist_text_view);
         initTextile();
+
+        initializeLocalDB();
     }
 
 
@@ -204,8 +210,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void playListActivity(View view) {
-        Intent intent = new Intent(getApplicationContext(), ListActivity.class);
+        Intent intent = new Intent(getApplicationContext(), CategoryActivity.class);
         startActivity(intent);
+    }
+
+
+    public static ArrayList<Artist> artists;
+    private void initializeLocalDB() {
+
+        FirebaseDatabase.getInstance().getReference().child("Artists").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                artists = new ArrayList<Artist>();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Artist artist = new Artist(ds.child("artistName").getValue(String.class));
+
+                    for (DataSnapshot ds1 : ds.child("Albums").getChildren()) {
+                        Album album = new Album(ds1.child("albumName").getValue(String.class));
+
+                        for (DataSnapshot ds2 : ds1.child("Songs").getChildren()) {
+                            album.addSong(new Song(ds2.child("title").getValue(String.class),
+                                    ds2.child("name").getValue(String.class),
+                                    ds2.child("hash").getValue(String.class)));
+                        }
+                        artist.addAlbum(album);
+                    }
+                    artists.add(artist);
+                }
+                System.out.println("AAAA"+artists);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 }
 

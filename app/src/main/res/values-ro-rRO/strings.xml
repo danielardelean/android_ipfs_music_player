@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cloud Music</string>
+    <string name="login_welcome_message">Autentifică-te în contul tău</string>
+    <string name="login_email_hint">E-mail</string>
+    <string name="login_password_hint">Parola</string>
+    <string name="login_forgot_password">Ai uitat parola?</string>
+    <string name="background_login_image_description">Imaginea de fundal al activității de autentificare</string>
+    <string name="login_button_text">Autentificare</string>
+    <string name="register_button_text">Înregistrare</string>
+    <string name="register_age_hint">Introduceți vârsta</string>
+</resources>
