@@ -6,15 +6,33 @@ public class Song implements Serializable {
     private String mTitle;
     private String mName;
     private String mHash;
+    private int mSkipTimes;
+    private int mPlayingTimes;
+    private String mGenre;
+    private float weight;
+    private boolean mLike;
 
+    public Song() {}
 
-    public Song(String mTitle, String mName, String mHash) {
+    public Song(String mTitle, String mName, String mHash, String mGenre) {
         this.mTitle = mTitle;
         this.mName = mName;
         this.mHash = mHash;
+        this.mGenre = mGenre;
     }
 
-    public Song() { }
+    //For streaming music history
+    public Song(String mTitle, String mName, String mHash, int mSkipTimes, int mPlayingTimes, String mGenre, boolean like) {
+        this.mTitle = mTitle;
+        this.mName = mName;
+        this.mHash = mHash;
+        this.mSkipTimes = mSkipTimes;
+        this.mPlayingTimes = mPlayingTimes;
+        this.mGenre = mGenre;
+        this.mLike = like;
+
+        this.weight = 0;
+    }
 
     public String getmTitle() {
         return mTitle;
@@ -24,24 +42,57 @@ public class Song implements Serializable {
         return mName;
     }
 
-    public void setmName(String mName) {
-        this.mName = mName;
-    }
-
     public String getmHash() {
         return mHash;
     }
 
-    public void setmHash(String mHash) {
-        this.mHash = mHash;
+    public int getmSkipTimes() {
+        return mSkipTimes;
+    }
+
+    public int getmPlayingTimes() {
+        return mPlayingTimes;
+    }
+
+    public String getmGenre() {
+        return mGenre;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
     }
 
     @Override
     public String toString() {
         return "Song{" +
-                "title='" + mTitle + '\'' +
-                ", artistName='" + mName + '\'' +
-                ", hash='" + mHash + '\'' +
+                "mTitle='" + mTitle + '\'' +
+                ", mName='" + mName + '\'' +
+                ", mHash='" + mHash + '\'' +
+                ", mSkipTimes=" + mSkipTimes +
+                ", mPlayingTimes=" + mPlayingTimes +
+                ", mGenre='" + mGenre + '\'' +
+                ", weight=" + weight +
+                ", mLike=" + mLike +
                 '}';
+    }
+
+    public void setmSkipTimes(int mSkipTimes) {
+        this.mSkipTimes = mSkipTimes;
+    }
+
+    public void setmPlayingTimes(int mPlayingTimes) {
+        this.mPlayingTimes = mPlayingTimes;
+    }
+
+    public boolean ismLike() {
+        return mLike;
+    }
+
+    public void setmLike(boolean mLike) {
+        this.mLike = mLike;
     }
 }

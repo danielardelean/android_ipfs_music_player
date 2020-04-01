@@ -1,4 +1,4 @@
-package com.example.textile.fragment;
+package com.example.textile.fragments;
 
 import android.os.Bundle;
 

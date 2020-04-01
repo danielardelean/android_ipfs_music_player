@@ -65,7 +65,6 @@
         android:scrollHorizontally="true"
 
         android:singleLine="true"
-        android:text="Title"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#FFFFFF" />
 
@@ -83,11 +82,11 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:text="Song Name"
         android:textColor="#FFFFFF" />
 
 
     <ImageButton
+        android:id="@+id/activity_main_like_image_button"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="0.5"

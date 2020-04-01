@@ -7,7 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.textile.fragment.SettingsFragment;
+import com.example.textile.fragments.SettingsFragment;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,7 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void getFile() {
-        Textile.instance().files.content("QmVKgGhphJEXaGmrd9zhDPRdtvF23szgKnZNN6U5nv8v5d", new Handlers.DataHandler() {
+        Textile.instance().files.content("QmR2xEFKqvsn285qL6mfVyDutvLj8L8prp89FktLAPJXCF", new Handlers.DataHandler() {
             @Override
             public void onComplete(byte[] data, String media) {
                 playMp3(data);

@@ -1,6 +1,7 @@
 package com.example.textile;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -15,8 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.textile.util.MyReceiver;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import io.textile.textile.BaseTextileEventListener;
+import io.textile.textile.Textile;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText emailTextView, passwordTextView;
@@ -29,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        initTextile();
 
         // initialising all views through id defined above
         emailTextView = findViewById(R.id.email);
@@ -105,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                                         "Welcome " + mAuth.getCurrentUser().getEmail() + "!", Toast.LENGTH_SHORT).show();
 
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                MainActivity.usernameApplication= mAuth.getCurrentUser().getEmail();
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(getApplicationContext(), "Email/password incorrect. Try again!", Toast.LENGTH_LONG).show();
@@ -120,6 +127,29 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Initialize the IPFS Textile node by using the secret hash of the account seed
+     * If node is already initialized, this call will be done just to start the node
+     */
+    private void initTextile() {
+        try {
+            Context ctx = getApplicationContext();
+
+            final File filesDir = ctx.getFilesDir();
+            final String path = new File(filesDir, "textile-go").getAbsolutePath();
+            if (!Textile.isInitialized(path)) {
+                Textile.initialize(path, MainActivity.ACCOUNT_SEED, true, false);
+            }
+
+            Textile.launch(ctx, path, true);
+            class MyEventListener extends BaseTextileEventListener {
+            }
+            Textile.instance().addEventListener(new MyEventListener());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 }

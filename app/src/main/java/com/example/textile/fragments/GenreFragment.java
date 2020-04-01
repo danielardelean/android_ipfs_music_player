@@ -1,4 +1,4 @@
-package com.example.textile.fragment;
+package com.example.textile.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,18 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import com.example.textile.Album;
-import com.example.textile.MainActivity;
+import com.example.textile.Genre;
 import com.example.textile.R;
-import com.example.textile.adapter.AlbumAdapter;
+import com.example.textile.adapters.GenreAdapter;
 
 import java.util.ArrayList;
 
-public class AlbumFragment extends Fragment  {
-    private ArrayList<Album> list;
+public class GenreFragment extends Fragment  {
+    private ArrayList<Genre> list;
     private Context mContext;
 
-    public AlbumFragment() {
+    public GenreFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -36,7 +36,6 @@ public class AlbumFragment extends Fragment  {
         mContext = null;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,17 +43,16 @@ public class AlbumFragment extends Fragment  {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_album, container, false);
+        View view = inflater.inflate(R.layout.fragment_genre, container, false);
 
-        list = new ArrayList<Album>();
-        for(int i=0;i<MainActivity.artists.size();i++){
-            for(int j=0;j<MainActivity.artists.get(i).getAlbumArrayList().size();j++) {
-                list.add(MainActivity.artists.get(i).getAlbumArrayList().get(j));
-            }
-        }
+        list = new ArrayList<Genre>();
+        list.add(new Genre("Pop"));
+        list.add(new Genre("Rock"));
+        list.add(new Genre("Indie"));
+        list.add(new Genre("Eloctro"));
 
-        AlbumAdapter itemsAdapter = new AlbumAdapter(mContext, list);
-        GridView gridView = view.findViewById(R.id.list_album);
+        GenreAdapter itemsAdapter = new GenreAdapter(mContext, list);
+        GridView gridView = view.findViewById(R.id.list_genre);
         gridView.setAdapter(itemsAdapter);
 
         return view;

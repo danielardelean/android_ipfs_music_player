@@ -6,48 +6,44 @@
     android:layout_height="match_parent"
     tools:context=".CategoryActivity">
 
-
-
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/white">
 
+            <ImageButton
+                android:id="@+id/category_back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:paddingLeft="8dp"
+                android:src="@drawable/ic_keyboard_arrow_left" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Songs"
                 android:gravity="center"
-                android:paddingLeft="28dp"
-                android:textStyle="bold"
-                android:textAppearance="?android:textAppearanceLarge"/>
+                android:paddingLeft="24dp"
+                android:text="Songs"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textStyle="bold" />
 
-            <ImageButton
-                android:background="@android:color/white"
-                android:onClick="backButton"
-                android:paddingRight="10dp"
-                android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_keyboard_arrow_right"/>
-        </RelativeLayout>
+        </LinearLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
-            app:tabTextAppearance="?android:textAppearanceSmall"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:tabTextAppearance="?android:textAppearanceSmall" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        />
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

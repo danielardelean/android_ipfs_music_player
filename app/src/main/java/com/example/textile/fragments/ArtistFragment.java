@@ -1,28 +1,25 @@
-package com.example.textile.fragment;
+package com.example.textile.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import com.example.textile.Genre;
+import androidx.fragment.app.Fragment;
+
+import com.example.textile.Artist;
+import com.example.textile.CategoryActivity;
 import com.example.textile.R;
-import com.example.textile.adapter.GenreAdapter;
+import com.example.textile.adapters.ArtistAdapter;
 
 import java.util.ArrayList;
 
-public class GenreFragment extends Fragment  {
-    private ArrayList<Genre> list;
-    private Context mContext;
+public class ArtistFragment extends Fragment {
+    private ArrayList<Artist> list;
 
-    public GenreFragment() {
-        // Required empty public constructor
-    }
+    private Context mContext;
 
     @Override
     public void onAttach(Context context) {
@@ -36,23 +33,21 @@ public class GenreFragment extends Fragment  {
         mContext = null;
     }
 
+    public ArtistFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_genre, container, false);
+        View view = inflater.inflate(R.layout.fragment_artist, container, false);
 
-        list = new ArrayList<Genre>();
-        list.add(new Genre("Pop"));
-        list.add(new Genre("Rock"));
-        list.add(new Genre("Indie"));
-        list.add(new Genre("Eloctro"));
-
-        GenreAdapter itemsAdapter = new GenreAdapter(mContext, list);
-        GridView gridView = view.findViewById(R.id.list_genre);
+        ArtistAdapter itemsAdapter = new ArtistAdapter(mContext, CategoryActivity.artists);
+        GridView gridView = view.findViewById(R.id.list_artist);
         gridView.setAdapter(itemsAdapter);
 
         return view;

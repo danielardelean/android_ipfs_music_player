@@ -1,4 +1,4 @@
-package com.example.textile.adapter;
+package com.example.textile.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,26 +29,26 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_album, parent, false);
-
-            TextView firstTextView = convertView.findViewById(R.id.album_name_textview);
-            firstTextView.setText(getItem(position).getmAlbumName());
-
-            convertView.findViewById(R.id.list_item).setOnClickListener(view -> {
-                Intent intent = new Intent(getContext(), ListActivity.class);
-
-                ArrayList<Song> allSongsArrayList = new ArrayList<>();
-                allSongsArrayList.addAll(getItem(position).getmAlbumSongsArraylist());
-
-                if (intent != null) {
-                    Bundle args = new Bundle();
-                    args.putSerializable("ARRAYLIST", (Serializable) allSongsArrayList);
-
-                    intent.putExtra("ALL_SONGS", args);
-                    getContext().startActivity(intent);
-                }
-
-            });
         }
+        TextView firstTextView = convertView.findViewById(R.id.album_name_textview);
+        firstTextView.setText(getItem(position).getmAlbumName());
+
+        convertView.findViewById(R.id.list_item).setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), ListActivity.class);
+
+            ArrayList<Song> allSongsArrayList = new ArrayList<>();
+            allSongsArrayList.addAll(getItem(position).getmAlbumSongsArraylist());
+
+            if (intent != null) {
+                Bundle args = new Bundle();
+                args.putSerializable("ARRAYLIST", (Serializable) allSongsArrayList);
+
+                intent.putExtra("ALL_SONGS", args);
+                getContext().startActivity(intent);
+            }
+
+        });
+
         return convertView;
     }
 }

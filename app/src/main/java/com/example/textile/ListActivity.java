@@ -6,7 +6,7 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.textile.adapter.ListAdapter;
+import com.example.textile.adapters.ListAdapter;
 
 import java.util.ArrayList;
 
