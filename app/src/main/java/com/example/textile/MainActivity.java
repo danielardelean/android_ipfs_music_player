@@ -102,35 +102,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeLocalDB() {
-        FirebaseDatabase.getInstance().getReference().child("Artists").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                CategoryActivity.artists = new ArrayList<Artist>();
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Artist artist = new Artist(ds.child("artistName").getValue(String.class));
-
-                    for (DataSnapshot ds1 : ds.child("Albums").getChildren()) {
-                        Album album = new Album(ds1.child("albumName").getValue(String.class));
-
-                        for (DataSnapshot ds2 : ds1.child("Songs").getChildren()) {
-
-                            album.addSong(new Song(ds2.child("title").getValue(String.class),
-                                    ds2.child("name").getValue(String.class),
-                                    ds2.child("hash").getValue(String.class),
-                                    ds2.child("genre").getValue(String.class)));
-                        }
-                        artist.addAlbum(album);
-                    }
-                    CategoryActivity.artists.add(artist);
-                }
-                System.out.println("Firebase DB data retrieve");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
         //User streaming history retrieve from Firebase Realtime
         FirebaseDatabase.getInstance().getReference().child("Users").addValueEventListener(new ValueEventListener() {
             @Override
@@ -157,6 +128,35 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     }
                 }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+
+        FirebaseDatabase.getInstance().getReference().child("Artists").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                CategoryActivity.artists = new ArrayList();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Artist artist = new Artist(ds.child("artistName").getValue(String.class));
+
+                    for (DataSnapshot ds1 : ds.child("Albums").getChildren()) {
+                        Album album = new Album(ds1.child("albumName").getValue(String.class));
+
+                        for (DataSnapshot ds2 : ds1.child("Songs").getChildren()) {
+                            album.addSong(new Song(ds2.child("title").getValue(String.class),
+                                    ds2.child("name").getValue(String.class),
+                                    ds2.child("hash").getValue(String.class),
+                                    ds2.child("genre").getValue(String.class)));
+                        }
+                        artist.addAlbum(album);
+                    }
+                    CategoryActivity.artists.add(artist);
+                }
+                System.out.println("Firebase DB data retrieve");
             }
 
             @Override
