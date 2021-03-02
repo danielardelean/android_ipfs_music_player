@@ -11,7 +11,7 @@ These instructions will get you a copy of the project up and running on your loc
 Clone repository
 
 ```
-https://github.com/danyardelean/Distributed_Music_App.git
+https://github.com/danielardelean/android_ipfs_music_player.git
 ```
 
 ### Installing
